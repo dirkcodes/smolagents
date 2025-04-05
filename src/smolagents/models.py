@@ -717,7 +717,8 @@ class TransformersModel(Model):
                 raise e
         except Exception as e:
             raise ValueError(f"Failed to load tokenizer and model for {model_id=}: {e}") from e
-        super().__init__(flatten_messages_as_text=not self._is_vlm, **kwargs)
+        self.model = torch.compile(self.model)
+        super().__init__(flatten_messages_as_text=not self._is_vlm, **kwargs.pop("kwargs_from_pretrained"))
 
     def make_stopping_criteria(self, stop_sequences: List[str], tokenizer) -> "StoppingCriteriaList":
         from transformers import StoppingCriteria, StoppingCriteriaList
