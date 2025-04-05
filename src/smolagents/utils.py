@@ -151,14 +151,17 @@ def make_json_serializable(obj: Any) -> Any:
 
 def parse_json_blob(json_blob: str) -> Tuple[Dict[str, str], str]:
     "Extracts the JSON blob from the input and returns the JSON data and the rest of the input."
+    json_data = None
     try:
         first_accolade_index = json_blob.find("{")
+        print('first_accolade_index:', first_accolade_index)
         last_accolade_index = [a.start() for a in list(re.finditer("}", json_blob))][-1]
+        print('last_accolade_index:', last_accolade_index)
         json_data = json_blob[first_accolade_index : last_accolade_index + 1]
         json_data = json.loads(json_data, strict=False)
         return json_data, json_blob[:first_accolade_index]
     except IndexError:
-        raise ValueError("The JSON blob you used is invalid")
+        raise ValueError("The JSON blob you used is invalid:", json_blob, json_data)
     except json.JSONDecodeError as e:
         place = e.pos
         if json_blob[place - 1 : place + 2] == "},\n":

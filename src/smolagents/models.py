@@ -661,6 +661,7 @@ class TransformersModel(Model):
         device_map: Optional[str] = None,
         torch_dtype: Optional[str] = None,
         trust_remote_code: bool = False,
+        kwargs_fron_pretrained: Optional[Dict[str, Any]] = None,
         **kwargs,
     ):
         try:
@@ -709,6 +710,7 @@ class TransformersModel(Model):
                     device_map=device_map,
                     torch_dtype=torch_dtype,
                     trust_remote_code=trust_remote_code,
+                    **kwargs_fron_pretrained,
                 )
                 self.tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=trust_remote_code)
             else:
